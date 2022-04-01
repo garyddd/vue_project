@@ -1,64 +1,67 @@
-
 <template>
-  <p>Test</p>
-  <h3>{{a}} </h3>
-  <el-button @click="getM"
-             type="primary">click</el-button>
+  <div ref="myChart"
+       :style="{ width: '400px', height: '400px' ,fontSize:'5px'}"></div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref, toRaw, toRef } from 'vue'
-import axios from 'axios'
-export default defineComponent({
-  name: 'TestFun',
-  setup() {
-    let a = ref('')
-    const path = 'http://localhost:5000/getMsg'
-    const tableData = computed(() => {
-      return 200 
-    })
-    function getM(){
-      axios.get(path).then((res)=>{
-        console.log('start ')
-        console.log(res.data)
-        a.value = res.data
 
-      })
-      // a.value += '==='
+<script lang="ts" setup>
+import { ref } from 'vue'
+import * as echarts from 'echarts'
+import axios from 'axios'
+
+
+const myChart = ref<HTMLElement>() //也可以用const myChart = ref<any>();
+
+// console.log(myChart)
+const myCharts = ref<any>()
+setTimeout(() => {
+  // 绘制图表
+  myCharts.value = echarts.init(myChart.value!)
+  myCharts.value.setOption({
+    title: { text: 'Length of CDR3β' },
+    tooltip: {},
+    xAxis: {
+      data: [],
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {
+        show:true,
+        textStyle:{
+          fontSize:'10'
+        }
+      }
+    },
+    series: [
+      {
+        name: 'Test',
+        type: 'bar',
+        data: [],
+      },
+    ],
+  })
+}, 10)
+const allData = ref([])
+axios.get('/test.json').then((res) => {
+  const arrNew: Array<string> = []
+  const map: { [key: string]: number } = {}
+  res.data.forEach((item: { CDR3b: string }) => {
+    if (!Object.prototype.hasOwnProperty.call(map, item.CDR3b.length)) {
+      map[item.CDR3b.length] = 1
+    } else {
+      map[item.CDR3b.length] += 1
+
     }
-    return {
-      tableData,a,getM
-    }
-  },
+  })
+
+  console.log(Object.values(map))
+  myCharts.value.setOption({
+    xAxis: {
+      data: Object.keys(map),
+    },
+    series: {
+      name: 'length',
+      data: Object.values(map),
+    },
+  })
 })
 </script>
-<!--  
-<template>
-  <div id="app">
-    <p>姓名：{{ name }}</p>
-    <p>年龄：
-      <button @click="changeAge(-1)">-</button>
-      {{ age }}
-      <button @click="changeAge(1)">+</button>
-    </p>
-    <p>出生年份：{{year}}</p>
-  </div>
-</template>
-
-<script>
-  // 不要忘记import
-  import { ref, computed } from 'vue'
-  export default {
-    setup(){
-      const name = ref('王路飞')
-      const age = ref(17)
-      const year = computed(() => {
-        return 2020 - age.value
-      })
-      function changeAge(val){
-        age.value += val
-      }
-      return {name, age, changeAge, year}
-    }
-  }
-</script>
--->

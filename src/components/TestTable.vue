@@ -1,45 +1,48 @@
 <template xmlns:height="http://www.w3.org/1999/xhtml">
-    <div class="header">
-      <el-input v-model="tableDataName"
-                placeholder="CAMRPSSFSKLVFC"
-                style="width:500px" />
-      <el-button @click.prevent="handleClick($event)" type="primary"
-                 @click="doFilter">Search</el-button>
-      <el-button @click.prevent="handleClick($event)" type="primary"
-                 @click="openData">ShowAll</el-button>
-    </div>
-    <div class='container_table' align="center" v-show="ShowFlag">
-      <el-pagination :current-page="currentPage1"
-                     background
-                     layout=" prev, pager, next, jumper,->, sizes,total,slot"
-                     :page-sizes="[50, 100, 150, 300]"
-                     :page-size="pageSize"
-                     :total="total1"
-                     @size-change="handleSizeChange1"
-                     @current-change="handleCurrentChange1" />
-      <el-table :data="tempList"
-                :header-cell-style="{background:'#BEE7E9',color:'#000000',}"
-                stripe
-                border
-                style="margin-bottom:14px;"
-                :empty-text="emptyText"
-                :default-sort="{prop:'time',order:'descending'}"
-                :highlight-current-row="true">
+  <div class="header">
+    <el-input v-model="tableDataName"
+              placeholder="CAMRPSSFSKLVFC"
+              style="width:500px" />
+    <el-button @click.prevent="handleClick($event)"
+               type="primary"
+               @click="doFilter">Search</el-button>
+    <el-button @click.prevent="handleClick($event)"
+               type="primary"
+               @click="openData">ShowAll</el-button>
+  </div>
+  <div class='container_table'
+       align="center" v-show='showFlag'>
+    <el-pagination :current-page="currentPage1"
+                   background
+                   layout=" prev, pager, next, jumper,->, sizes,total,slot"
+                   :page-sizes="[50, 100, 150, 300]"
+                   :page-size="pageSize"
+                   :total="total1"
+                   @size-change="handleSizeChange1"
+                   @current-change="handleCurrentChange1" />
+    <el-table :data="tempList"
+              :header-cell-style="{background:'#BEE7E9',color:'#000000',}"
+              stripe
+              border
+              style="margin-bottom:14px;"
+              :empty-text="emptyText"
+              :default-sort="{prop:'time',order:'descending'}"
+              :highlight-current-row="true">
 
-        <el-table-column type="index"
-                         :index="indexMethod"
-                         label="#"
-                         align='center' />
-        <el-table-column v-for="item in columnsName"
-                         :key="item.id"
-                         :property='item'
-                         :label='item'
-                         align="center" />
+      <el-table-column type="index"
+                       :index="indexMethod"
+                       label="#"
+                       align='center' />
+      <el-table-column v-for="item in columnsName"
+                       :key="item.id"
+                       :property='item'
+                       :label='item'
+                       align="center" />
 
-      </el-table>
+    </el-table>
 
-    </div>
-    <div class="footer" />
+  </div>
+  <div class="footer" ></div>
 </template>
  
 <script>
@@ -76,10 +79,13 @@ export default {
   },
   methods: {
     getMessage() {
-      const path = 'http://localhost:5000/getMsg'
+      console.time('计时器1')
+      const path = '/test.json'
       axios
         .get(path)
         .then((res) => {
+          console.log('success')
+          console.log(res.data)
           this.bondsAllList = res.data
           this.getCreateTable()
           // 获取数据行名
@@ -88,6 +94,7 @@ export default {
         .catch((error) => {
           alert(error)
         })
+      console.timeEnd('计时器1')
     },
     handleSizeChange1: function (pageSize) {
       // 每页条数切换
@@ -155,20 +162,20 @@ export default {
       this.tableDataName = ''
     },
     openData() {
-      // this.tableDataName = []     
-      // 判断search之后点击showall默认显示所有 
-      if (!this.flag){
-        this.ShowFlag = ! this.ShowFlag
+      // this.tableDataName = []
+      // 判断search之后点击showall默认显示所有
+      if (!this.flag) {
+        this.ShowFlag = !this.ShowFlag
       }
-      
+
       this.getCreateTable()
     },
     handleClick(event) {
-    event.target.blur();
-    if(event.target.nodeName == "SPAN") {
-        event.target.parentNode.blur();
-    }
-}
+      event.target.blur()
+      if (event.target.nodeName == 'SPAN') {
+        event.target.parentNode.blur()
+      }
+    },
   },
 }
 </script>
@@ -179,13 +186,10 @@ export default {
   text-align: center;
 }
 .container_table {
-  width:96%;
-  margin-left:2%;
+  width: 96%;
+  margin-left: 2%;
 }
-.el-table{
-
+.el-table {
   border-radius: 10px;
 }
-
-
 </style>

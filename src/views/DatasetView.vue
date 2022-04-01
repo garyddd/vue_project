@@ -9,6 +9,6 @@ export default defineComponent({
   name:'DatasetView',
   components:{
     TestTablev3,
-  }
+  },
 })
 </script>
