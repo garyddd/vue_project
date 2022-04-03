@@ -1,40 +1,106 @@
 
 <template>
-  <div class="header">
-    <el-input v-model="tableDataName"
-              placeholder="CAMRPSSFSKLVFC"
-              style="width:20%;margin-right:1%"
-              maxlength=15
-              :prefix-icon="Search">
-      <!-- <template #prepend>CDR3α</template> -->
-    </el-input>
-    <el-button @focus="blurAgain"
-               type="primary"
-               @click="doSearch">Search</el-button>
-    <el-button @focus="blurAgain"
-               type="primary"
-               @click="openData">ShowAll</el-button>
-    <el-button @click="getM"
-               @focus="blurAgain"
-               type='primary'>Click</el-button>
-    <el-button @click="postM"
-               @focus="blurAgain"
-               type='primary'>Post</el-button>
-    <!-- <el-input v-model="columnsName"
-              style="width:20%;margin-right:1%">
-    </el-input> -->
+
+  <div class='header'
+       align="center">
+    <div class='inner_table'>
+      <h2 style="
+       color:#19CAAD;text-align:left;">Dataset Browser</h2>
+      <el-divider />
+      <el-row :gutter="20">
+        <el-col :span="12">
+
+          <el-divider content-position="center">
+            <el-tooltip effect='light'
+                        placement='top'>
+              <template #content> Describe CDR3</template>
+              CDR3
+            </el-tooltip>
+          </el-divider>
+          <el-row>
+            <el-col :span=4></el-col>
+            <el-col :span=16>
+              <el-form :model="formCDR3"
+                       :label-position='labelPosition'>
+                <el-form-item label="Sequence">
+                  <el-input v-model="tableDataName"
+                            placeholder="CAMRPSSFSKLVFC">
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </el-col>
+            <el-col :span=4></el-col>
+          </el-row>
+
+        </el-col>
+        <el-col :span="12">
+
+          <el-divider content-position="center">
+            <el-tooltip effect='light'
+                        placement='top'>
+              <template #content> Describe INFO</template>
+              INFO
+            </el-tooltip>
+          </el-divider>
+          <el-form :model="formInfo"
+                   :label-position='labelPosition'>
+            <el-form-item label="Species">
+              <el-checkbox-group v-model="speciesListChecked"
+                                 @change="handleCheckedChange">
+                <el-checkbox v-for="specie in speciesList"
+                             :key="specie"
+                             :label="specie"
+                             @change="handleCheckedChange1">{{specie}}</el-checkbox>
+              </el-checkbox-group>
+
+              <el-checkbox v-model="checkAll"
+                           :indeterminate="isIndeterminate"
+                           @change="handleCheckAllChange"
+                           style='margin-left:30px'>Check all</el-checkbox>
+
+            </el-form-item>
+
+            <el-form-item label="Gene(chain)">
+              <el-checkbox-group v-model="geneListChecked"
+                                 @change="handleCheckedChangeGene">
+                <el-checkbox v-for="gene in geneList"
+                             :key="gene"
+                             :label="gene"
+                             @change="handleCheckedChangeGene1">{{gene}}</el-checkbox>
+              </el-checkbox-group>
+
+              <el-checkbox v-model="checkAllGene"
+                           :indeterminate="isIndeterminateGene"
+                           @change="handleCheckAllChangeGene"
+                           style='margin-left:30px'>Check all</el-checkbox>
+
+            </el-form-item>
+          </el-form>
+
+        </el-col>
+      </el-row>
+    </div>
+    <div style='margin-top:20px;background-color:#f3f4f5;padding:14px'>
+      <el-button @focus="blurAgain"
+                 type="primary"
+                 @click="doSearch"
+                 :icon="Search">Search</el-button>
+
+      <el-button @focus="blurAgain"
+                 type="primary"
+                 @click="openData">ShowAll<el-icon class="el-icon--right">
+          <View />
+        </el-icon>
+      </el-button>
+    </div>
   </div>
   <div class='container_table'
        align="center"
-       v-show='showFlag'
-       :style="{
-          boxShadow: `--el-box-shadow-dark`,
-        }">
+       v-show='showFlag'>
     <div class='inner_table'>
       <h2 style="
        color:#19CAAD;text-align:left;">Result</h2>
-      <hr>
-      <!-- <hr> -->
+      <el-divider />
       <el-pagination v-model:currentPage="currentPage"
                      background
                      v-model:page-size="pageSize"
@@ -57,10 +123,30 @@
                 style="margin-bottom:14px;"
                 :default-sort="{prop:'time',order:'descending'}"
                 :highlight-current-row="true">
+
         <el-table-column type="index"
                          :index="indexMethod"
                          label="ID"
                          align='center' />
+        <el-table-column label="Gene"
+                         width="180"
+                         align='center'>
+          <!-- <template #default="scope"> -->
+          <!-- <el-popover effect="light"
+                        trigger="hover"
+                        title='info'
+                        placement="top"
+                        width="auto"> -->
+          <!-- <template #default>
+                <div>TRAV: {{ scope.row.Valpha }}</div>
+                <div>TRAJ: {{ scope.row.Jalpha }}</div>
+              </template> -->
+          <template #default="scope">
+            <el-tag  type='warning'>{{ scope.row.Gene}}</el-tag>
+          </template>
+          <!-- </el-popover> -->
+          <!-- </template> -->
+        </el-table-column>
         <el-table-column v-for="item in columnsName"
                          :key="item.id"
                          :property='item'
@@ -82,7 +168,7 @@
               </template> -->
           <template #default="scope">
             <!-- <div align='center'> -->
-            <el-tag type='info'>{{ scope.row.Species}}</el-tag>
+            <el-tag type='success'>{{ scope.row.Species}}</el-tag>
           </template>
           <!-- </el-popover> -->
           <!-- </template> -->
@@ -96,27 +182,21 @@
   <div class="footer" />
 </template>
 <script lang="ts" setup>
-import { onBeforeMount, reactive, ref } from 'vue'
-import { Search } from '@element-plus/icons-vue'
+import { ref, defineProps } from 'vue'
+import { Search, View } from '@element-plus/icons-vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-
+// const props = defineProps({
+//   allData:Object
+// })
 const loading = ref(true)
 const currentPage = ref(1)
 const pageSize = ref(50)
 const emptyText = ref('Loading...')
+
+const labelPosition = ref('top')
 // 表头
-const columnsName = ref(['Gene', 'Vgene', 'CDR3', 'Jgene'])
-const svg = `
-        <path class="path" d="
-          M 30 15
-          L 28 17
-          M 25.61 25.61
-          A 15 15, 0, 0, 1, 15 30
-          A 15 15, 0, 1, 1, 27.99 7.5
-          L 15 15
-        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
-      `
+const columnsName = ref(['Vgene', 'CDR3', 'Jgene'])
 
 // const path = 'http://localhost:5000/getMsg'
 const path = '/test2.json'
@@ -130,18 +210,56 @@ function getM() {
 // 接收后端传回数据，并进行分页显示
 // 声明一个变量用于中转搜索
 const forwardTable = ref([])
-// console.time('计时器1')
 axios.get(path).then((res) => {
   allData.value = res.data
   forwardTable.value = res.data // TODO:优化中转数据的存储方式
   totalSeqs.value = res.data.length
   loading.value = false
-  // const arrNew: Array<number> = []
-  // allData.value.forEach((item) => {
-  //   arrNew.push(item.CDR3a_len)
-  // })
 })
-// console.timeEnd('计时器1')
+
+forwardTable.value = allData.value
+console.log(forwardTable.value)
+totalSeqs.value = allData.value.length
+loading.value = false
+
+const checkAll = ref(false)
+const isIndeterminate = ref(false)
+const speciesListChecked = ref(['Human'])
+const speciesList = ['Human', 'Mouse', 'Cattle']
+const handleCheckAllChange = (val: boolean) => {
+  speciesListChecked.value = val ? speciesList : ['Human']
+  isIndeterminate.value = !val
+}
+const handleCheckedChange = (value: string[]) => {
+  const checkedCount = value.length
+  checkAll.value = checkedCount === speciesList.length
+  isIndeterminate.value = checkedCount > 0 && checkedCount < speciesList.length
+}
+const checkAllGene = ref(false)
+const isIndeterminateGene = ref(false)
+const geneListChecked = ref(['TRB'])
+const geneList = ['TRA', 'TRB']
+const handleCheckAllChangeGene = (val: boolean) => {
+  geneListChecked.value = val ? geneList : ['TRB']
+  isIndeterminateGene.value = !val
+}
+const handleCheckedChangeGene = (value: string[]) => {
+  const checkedCountGene = value.length
+  checkAllGene.value = checkedCountGene === geneList.length
+  isIndeterminateGene.value =
+    checkedCountGene > 0 && checkedCountGene < geneList.length
+}
+const handleCheckedChange1 = (val: boolean) => {
+  if (!isIndeterminate.value && !checkAll.value) {
+    speciesListChecked.value = ['Human']
+  }
+}
+const handleCheckedChangeGene1 = (val: boolean) => {
+  if (!isIndeterminateGene.value && !checkAllGene.value) {
+    geneListChecked.value = ['TRB']
+  }
+}
+
 const handleSizeChange = (val: number) => {
   pageSize.value = val
 }
@@ -167,13 +285,13 @@ function doSearch() {
   emptyText.value = 'No Data'
   if (tableDataName.value == '') {
     ElMessage({
-      message: 'If not entered, the default sequence will be used to search！',
+      message: 'If not setting, the default sequence will be used to search！',
       type: 'warning',
     })
     tableDataName.value = 'CAMRPSSFSKLVFC'
   }
   tableDataName.value = tableDataName.value.toUpperCase()
-  var reg = /^[ACDEFGHIKLMNPQRSTVWY]+$/
+  var reg = /^[ ACDEFGHIKLMNPQRSTVWY]+$/
   if (!reg.test(tableDataName.value)) {
     ElMessage({
       message: 'Please enter the correct amino acid format！',
@@ -183,9 +301,14 @@ function doSearch() {
   }
   const filterTableDataEnd: Array<string> = []
   allData.value.forEach((value, index) => {
+    console.log(value.CDR3)
     if (value.CDR3) {
       if (value.CDR3.indexOf(tableDataName.value) >= 0) {
-        filterTableDataEnd.push(value)
+        if (value.Species.indexOf(speciesListChecked.value) >= 0) {
+          if (value.Gene.indexOf(geneListChecked.value) >= 0) {
+            filterTableDataEnd.push(value)
+          }
+        }
       }
     }
   })
@@ -193,7 +316,7 @@ function doSearch() {
   currentPage.value = 1
   totalSeqs.value = filterTableDataEnd.length
   // currentChangePage(filterTableDataEnd, currentPage)
-  tableDataName.value = ''
+  // tableDataName.value = ''
 
   loading.value = false
 }
@@ -212,8 +335,13 @@ const postM = () => {
 
 <style scoped>
 .header {
-  padding: 30px;
-  text-align: center;
+  /* padding: 30px; */
+  width: 96%;
+  margin-left: 2%;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
 }
 .container_table {
   width: 96%;
@@ -225,8 +353,9 @@ const postM = () => {
   width: 96%;
   padding: 10px;
 }
+
 .el-table {
-  border-radius: 4px;
+  border-radius: 0.3rem;
 }
 
 .footer {

@@ -1,13 +1,14 @@
 <template>
   <div ref="myChart"
        :style="{ width: '400px', height: '400px' ,fontSize:'5px'}"></div>
+  <echartsCom ></echartsCom>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { provide, ref } from 'vue'
 import * as echarts from 'echarts'
 import axios from 'axios'
-
+import echartsCom from 'H:/vue/newvue/src/components/Test/ecahrtsCom.vue'
 
 const myChart = ref<HTMLElement>() //也可以用const myChart = ref<any>();
 
@@ -40,9 +41,8 @@ setTimeout(() => {
     ],
   })
 }, 10)
-const allData = ref([])
+provide('map1','test')
 axios.get('/test.json').then((res) => {
-  const arrNew: Array<string> = []
   const map: { [key: string]: number } = {}
   res.data.forEach((item: { CDR3b: string }) => {
     if (!Object.prototype.hasOwnProperty.call(map, item.CDR3b.length)) {
@@ -52,8 +52,7 @@ axios.get('/test.json').then((res) => {
 
     }
   })
-
-  console.log(Object.values(map))
+  provide('map', map)
   myCharts.value.setOption({
     xAxis: {
       data: Object.keys(map),
@@ -64,4 +63,5 @@ axios.get('/test.json').then((res) => {
     },
   })
 })
+
 </script>

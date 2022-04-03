@@ -1,18 +1,19 @@
 <template>
-  <h2>This is browser view</h2>
-  <el-row>
-    <el-col :span="6"></el-col>
-    <el-col :span="18"><div calss='grid-content'></div>
-  <TestFun></TestFun></el-col>
-  </el-row>
+  <TestTablev3 ></TestTablev3>
+  <!-- <TestD :allData='test' ></TestD> -->
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-import TestFun from '../components/TestFun.vue'
+import { defineComponent, ref } from 'vue'
+import TestTablev3 from '../components/TestTablev3.vue'
+
+// import TestD from '../components/TestD.vue'
+
+import axios from 'axios'
 export default defineComponent({
-  name:'BrowserView',
-  components:{
-    TestFun
+  name: 'BrowserView',
+  components: {
+    TestTablev3,
+    // TestD,
   }
 })
 </script>
