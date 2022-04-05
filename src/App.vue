@@ -7,10 +7,10 @@
              text-color="#fff"
              active-text-color="#ffd04b"
              router>
-      <el-menu-item></el-menu-item>
-      <el-menu-item></el-menu-item>
-      <el-menu-item></el-menu-item>
-      <el-menu-item></el-menu-item>
+      <el-menu-item ></el-menu-item>
+      <el-menu-item ></el-menu-item>
+      <el-menu-item ></el-menu-item>
+      <el-menu-item ></el-menu-item>
       <!-- <el-menu-item class='logo_text' index='/'
                     style="font-size:50px;color:#D1BA74;font-style:italic">UcTc</el-menu-item> -->
       <el-menu-item class='logo_text' index='/'><img src="./assets/logo.png" alt=""></el-menu-item>
@@ -24,8 +24,8 @@
       <el-menu-item index="/about">About</el-menu-item>
     </el-menu>
 
-  </div>
   <router-view />
+  </div>
 </template>
 
 

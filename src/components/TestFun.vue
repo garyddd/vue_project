@@ -1,67 +1,28 @@
 <template>
-  <div ref="myChart"
-       :style="{ width: '400px', height: '400px' ,fontSize:'5px'}"></div>
-  <echartsCom ></echartsCom>
+  <div style="  fontSize:'5px';background-color:white">
+    <h2 style="padding-top:20px">Summary of the Datasets</h2>
+    <el-divider />
+
+    <countSpecies></countSpecies>
+
+    <el-divider style='margin-top:0px' />
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <lengthalpha></lengthalpha>
+      </el-col>
+      <el-col :span="12">
+        <lengthbeta></lengthbeta>
+      </el-col>
+    </el-row>
+    <el-divider />
+    <h2>Next !!!</h2>
+  </div>
+
 </template>
 
 <script lang="ts" setup>
-import { provide, ref } from 'vue'
-import * as echarts from 'echarts'
-import axios from 'axios'
-import echartsCom from 'H:/vue/newvue/src/components/Test/ecahrtsCom.vue'
-
-const myChart = ref<HTMLElement>() //也可以用const myChart = ref<any>();
-
-// console.log(myChart)
-const myCharts = ref<any>()
-setTimeout(() => {
-  // 绘制图表
-  myCharts.value = echarts.init(myChart.value!)
-  myCharts.value.setOption({
-    title: { text: 'Length of CDR3β' },
-    tooltip: {},
-    xAxis: {
-      data: [],
-    },
-    yAxis: {
-      type: 'value',
-      axisLabel: {
-        show:true,
-        textStyle:{
-          fontSize:'10'
-        }
-      }
-    },
-    series: [
-      {
-        name: 'Test',
-        type: 'bar',
-        data: [],
-      },
-    ],
-  })
-}, 10)
-provide('map1','test')
-axios.get('/test.json').then((res) => {
-  const map: { [key: string]: number } = {}
-  res.data.forEach((item: { CDR3b: string }) => {
-    if (!Object.prototype.hasOwnProperty.call(map, item.CDR3b.length)) {
-      map[item.CDR3b.length] = 1
-    } else {
-      map[item.CDR3b.length] += 1
-
-    }
-  })
-  provide('map', map)
-  myCharts.value.setOption({
-    xAxis: {
-      data: Object.keys(map),
-    },
-    series: {
-      name: 'length',
-      data: Object.values(map),
-    },
-  })
-})
-
+// import echartsCom from './/summaryCom/lengthCom.vue'
+import countSpecies from './summaryCom/countAll.vue'
+import lengthbeta from './summaryCom/lengthbeta.vue'
+import lengthalpha from './summaryCom/lengthalpha.vue'
 </script>

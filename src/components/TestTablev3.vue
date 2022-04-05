@@ -113,9 +113,6 @@
 
       <el-table v-loading="loading"
                 element-loading-text="Loading..."
-                :element-loading-svg="svg"
-                class="custom-loading-svg"
-                element-loading-svg-view-box="-10, -10, 50, 50"
                 :data="forwardTable.slice((currentPage-1)*pageSize,currentPage*pageSize)"
                 :header-cell-style="{background:'#BEE7E9',color:'#000000',}"
                 stripe
@@ -125,7 +122,6 @@
                 :highlight-current-row="true">
 
         <el-table-column type="index"
-                         :index="indexMethod"
                          label="ID"
                          align='center' />
         <el-table-column label="Gene"
@@ -142,7 +138,7 @@
                 <div>TRAJ: {{ scope.row.Jalpha }}</div>
               </template> -->
           <template #default="scope">
-            <el-tag  type='warning'>{{ scope.row.Gene}}</el-tag>
+            <el-tag type='warning'>{{ scope.row.Gene}}</el-tag>
           </template>
           <!-- </el-popover> -->
           <!-- </template> -->
@@ -182,13 +178,13 @@
   <div class="footer" />
 </template>
 <script lang="ts" setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import { Search, View } from '@element-plus/icons-vue'
 import axios from 'axios'
+
+import store from '@/store/store'
 import { ElMessage } from 'element-plus'
-// const props = defineProps({
-//   allData:Object
-// })
+
 const loading = ref(true)
 const currentPage = ref(1)
 const pageSize = ref(50)
@@ -199,8 +195,9 @@ const labelPosition = ref('top')
 const columnsName = ref(['Vgene', 'CDR3', 'Jgene'])
 
 // const path = 'http://localhost:5000/getMsg'
-const path = '/test2.json'
-const allData = ref([])
+// const path = '/test2.json'
+// const allData = ref([])
+const allData = store.state.name
 let showFlag = ref(true)
 const totalSeqs = ref(0)
 // 控制table显示
@@ -210,22 +207,21 @@ function getM() {
 // 接收后端传回数据，并进行分页显示
 // 声明一个变量用于中转搜索
 const forwardTable = ref([])
-axios.get(path).then((res) => {
-  allData.value = res.data
-  forwardTable.value = res.data // TODO:优化中转数据的存储方式
-  totalSeqs.value = res.data.length
-  loading.value = false
-})
+// axios.get(path).then((res) => {
+//   allData.value = res.data
+//   forwardTable.value = res.data // TODO:优化中转数据的存储方式
+//   totalSeqs.value = res.data.length
+//   loading.value = false
+// })
 
-forwardTable.value = allData.value
-console.log(forwardTable.value)
-totalSeqs.value = allData.value.length
+forwardTable.value = Object.values(allData)
+totalSeqs.value = Object.values(allData).length
 loading.value = false
 
 const checkAll = ref(false)
 const isIndeterminate = ref(false)
 const speciesListChecked = ref(['Human'])
-const speciesList = ['Human', 'Mouse', 'Cattle']
+const speciesList = ['Human', 'Mouse', 'Cow']
 const handleCheckAllChange = (val: boolean) => {
   speciesListChecked.value = val ? speciesList : ['Human']
   isIndeterminate.value = !val
@@ -273,8 +269,8 @@ const blurAgain = (e) => {
 }
 
 function openData() {
-  forwardTable.value = allData.value
-  totalSeqs.value = allData.value.length
+  forwardTable.value = Object.values(allData)
+  totalSeqs.value = Object.values(allData).length
   currentPage.value = 1
 }
 // 搜索功能 -- 添加多个搜索规则
@@ -285,27 +281,28 @@ function doSearch() {
   emptyText.value = 'No Data'
   if (tableDataName.value == '') {
     ElMessage({
-      message: 'If not setting, the default sequence will be used to search！',
+      message: 'If not setting, the default setting will be used to search！',
       type: 'warning',
     })
-    tableDataName.value = 'CAMRPSSFSKLVFC'
+    // tableDataName.value = 'CAMRPSSFSKLVFC'
   }
   tableDataName.value = tableDataName.value.toUpperCase()
   var reg = /^[ ACDEFGHIKLMNPQRSTVWY]+$/
-  if (!reg.test(tableDataName.value)) {
+  if (tableDataName.value&&!reg.test(tableDataName.value)) {
     ElMessage({
       message: 'Please enter the correct amino acid format！',
       type: 'warning',
     })
     return
   }
+console.log()
   const filterTableDataEnd: Array<string> = []
-  allData.value.forEach((value, index) => {
-    console.log(value.CDR3)
+  Object.values(allData).forEach((value, index) => {
+    // console.log(!tableDataName.value)
     if (value.CDR3) {
-      if (value.CDR3.indexOf(tableDataName.value) >= 0) {
-        if (value.Species.indexOf(speciesListChecked.value) >= 0) {
-          if (value.Gene.indexOf(geneListChecked.value) >= 0) {
+      if (!tableDataName.value||value.CDR3.indexOf(tableDataName.value) >= 0) {
+        if (speciesListChecked.value.indexOf(value.Species) >= 0) {
+          if (geneListChecked.value.indexOf(value.Gene) >= 0) {
             filterTableDataEnd.push(value)
           }
         }
