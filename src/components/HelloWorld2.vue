@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios'
-import { ref } from 'vue'
+// import axios from 'axios'
+// import { ref } from 'vue'
 // const a = ref('a')
 // const updataD = () => {
 //   axios.get('http://127.0.0.1:5000/').then((res) => {

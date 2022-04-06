@@ -26,6 +26,8 @@
 
   <router-view />
   </div>
+  <div class="footer"> <b>Copyright (c)</b>  <br>
+Any comments and suggestions, please contact us.</div>
 </template>
 
 
@@ -62,5 +64,8 @@ body {
 .logo_text{
   border-color: #545c64 !important;
   background-color:#545c64 !important;
+}
+.footer{
+  padding: 20px
 }
 </style>

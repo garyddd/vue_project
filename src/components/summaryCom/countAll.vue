@@ -11,8 +11,7 @@ const data = store.state.name
 const map_gene: { [key: string]: number } = {}
 const map_species: { [key: string]: number } = {}
 const map_cate: { [key: string]: number } = {}
-Object.values(data).forEach(
-  (item: { Species: string; Gene: string; Cate: string }) => {
+Object.values(data).forEach((item: { Species: string; Gene: string; Cate: string }) => {
     if (!Object.prototype.hasOwnProperty.call(map_species, item.Species)) {
       map_species[item.Species] = 1
     } else {
@@ -52,7 +51,7 @@ for (var k = 0; k < Object.keys(map_cate).length; k++) {
 
 const option = {
   title: {
-    text: 'All Records : ',
+    text: 'All Records',
     subtext: 'Numbers : ' + Object.values(data).length,
     left: 'center',
   },
@@ -66,7 +65,7 @@ const option = {
     top: '0%',
     feature: {
       mark: { show: true },
-      dataView: { show: true, title:'dataView',readOnly: true },
+      dataView: { show: true, title:'dataView',readOnly: false },
       saveAsImage: { show: true, title:'save'  },
     },
   },
@@ -75,7 +74,7 @@ const option = {
       name: 'Records',
       type: 'pie',
       radius: '50%',
-      center: ['20%', '50%'],
+      center: ['50%', '50%'],
       data: plotData.species,
       emphasis: {
         itemStyle: {
@@ -89,7 +88,7 @@ const option = {
       name: 'Records',
       type: 'pie',
       radius: '50%',
-      center: ['50%', '50%'],
+      center: ['80%', '50%'],
       data: plotData.gene,
       emphasis: {
         itemStyle: {
@@ -103,7 +102,7 @@ const option = {
       name: 'Records',
       type: 'pie',
       radius: '50%',
-      center: ['80%', '50%'],
+      center: ['20%', '50%'],
       data: plotData.cate,
       emphasis: {
         itemStyle: {
