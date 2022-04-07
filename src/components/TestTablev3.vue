@@ -17,7 +17,7 @@
           <el-row>
             <el-col :span=4></el-col>
             <el-col :span=16>
-              <el-form :model="formCDR3"
+              <el-form 
                        :label-position='labelPosition'>
                 <el-form-item>
                   <template #label>
@@ -38,6 +38,32 @@
                             placeholder="CAMRPSSFSKLVFC">
                   </el-input>
                 </el-form-item>
+                <el-form-item >
+                  <template #label>
+
+                    <p>Variable segment
+                      <el-tooltip effect='light'
+                                  placement='right'>
+                        <template #content> If Gene channel be switched to <el-tag type='info'> only paired</el-tag>,<br> the V/J search bar will be disabled.</template>
+                        <el-icon>
+                          <InfoFilled />
+                        </el-icon>
+                      </el-tooltip>
+
+                    </p>
+                  </template>
+
+                  <el-input v-model="tableDataNameV"
+                            placeholder="V gene"
+                            :disabled='formDis'>
+                  </el-input>
+                </el-form-item>
+                <el-form-item label='Joining segment'>
+                  <el-input v-model="tableDataNameJ"
+                            placeholder="J gene"
+                            :disabled='formDis'>
+                  </el-input>
+                </el-form-item>
               </el-form>
             </el-col>
             <el-col :span=4></el-col>
@@ -53,7 +79,7 @@
               INFO
             </el-tooltip>
           </el-divider>
-          <el-form :model="formInfo"
+          <el-form 
                    :label-position='labelPosition'>
             <el-form-item label="Species">
               <el-checkbox-group v-model="speciesListChecked"
@@ -174,7 +200,7 @@
                          width="180"
                          align='center'>
           <template #default="scope">
-            <el-tag type='success'>{{ scope.row.Cate}}</el-tag>
+            <el-tag type='info'>{{ scope.row.Cate}}</el-tag>
           </template>
         </el-table-column>
 
@@ -217,7 +243,7 @@
                          align='center'>
 
           <template #default="scope">
-            <el-tag type='success'>{{ scope.row.Cate}}</el-tag>
+            <el-tag type='info'>{{ scope.row.Cate}}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -258,6 +284,7 @@ const columnsName_paired = ref([
 const allData = store.state.name
 const allData_paired = store.state.name1
 let showFlag = ref(true)
+const formDis = ref(false)
 const totalSeqs = ref(0)
 // 控制table显示
 function getM() {
@@ -295,8 +322,8 @@ const handleCheckedChange = (value: string[]) => {
 
 const checkAllCate = ref(true)
 const isIndeterminateCate = ref(false)
-const cateListChecked = ref(['MAIT', 'iNKT', 'GEMT', 'non_MAIT'])
-const cateList = ['MAIT', 'iNKT', 'GEMT', 'non_MAIT']
+const cateListChecked = ref(['MAIT', 'NKT', 'GEMT', 'non_MAIT'])
+const cateList = ['MAIT', 'NKT', 'GEMT', 'non_MAIT']
 const handleCheckAllChangeCate = (val: boolean) => {
   cateListChecked.value = val ? cateList : ['MAIT']
   isIndeterminateCate.value = !val
@@ -326,6 +353,11 @@ const handleCheckedChange1 = (val: boolean) => {
     speciesListChecked.value = ['Human']
   }
 }
+const handleCheckedChange2 = (val: boolean) => {
+  if (!isIndeterminateCate.value && !checkAllCate.value) {
+    cateListChecked.value = ['MAIT']
+  }
+}
 const handleCheckedChangeGene1 = (val: boolean) => {
   if (!isIndeterminateGene.value && !checkAllGene.value) {
     geneListChecked.value = ['TRB']
@@ -338,6 +370,9 @@ const handleCheckedChangeGene1 = (val: boolean) => {
   }
   if (geneListChecked.value.indexOf('only paired') >= 0) {
     geneListChecked.value = ['only paired']
+    formDis.value = true
+  } else {
+    formDis.value = false
   }
 }
 
@@ -364,6 +399,8 @@ function openData() {
 // 搜索功能 -- 添加多个搜索规则
 // 1. 前端处理
 const tableDataName = ref('')
+const tableDataNameV = ref('')
+const tableDataNameJ = ref('')
 function doSearch() {
   emptyText.value = 'No Data'
   // if (tableDataName.value == '') {
@@ -374,6 +411,8 @@ function doSearch() {
   //   // tableDataName.value = 'CAMRPSSFSKLVFC'
   // }
   tableDataName.value = tableDataName.value.toUpperCase()
+  tableDataNameV.value = tableDataNameV.value.toUpperCase()
+  tableDataNameJ.value = tableDataNameJ.value.toUpperCase()
   var reg = /^[ ACDEFGHIKLMNPQRSTVWY]+$/
   if (tableDataName.value && !reg.test(tableDataName.value)) {
     ElMessage({
@@ -393,13 +432,16 @@ function doSearch() {
         value.CDR3b.indexOf(tableDataName.value) >= 0
       ) {
         if (speciesListChecked.value.indexOf(value.Species) >= 0) {
-          filterTableDataEnd.push(value)
+          if (cateListChecked.value.indexOf(value.Cate) >= 0) {
+            filterTableDataEnd.push(value)
+          }
         }
       }
     })
     forwardTable_paired.value = filterTableDataEnd
     currentPage.value = 1
     totalSeqs.value = filterTableDataEnd.length
+    
   } else {
     show_single.value = true
     Object.values(allData).forEach((value) => {
@@ -408,9 +450,21 @@ function doSearch() {
         !tableDataName.value ||
         value.CDR3.indexOf(tableDataName.value) >= 0
       ) {
-        if (speciesListChecked.value.indexOf(value.Species) >= 0) {
-          if (geneListChecked.value.indexOf(value.Gene) >= 0) {
-            filterTableDataEnd.push(value)
+        if (
+          !tableDataNameV.value ||
+          value.Vgene.indexOf(tableDataNameV.value) >= 0
+        ) {
+          if (
+            !tableDataNameJ.value ||
+            value.Jgene.indexOf(tableDataNameJ.value) >= 0
+          ) {
+            if (speciesListChecked.value.indexOf(value.Species) >= 0) {
+              if (geneListChecked.value.indexOf(value.Gene) >= 0) {
+                if (cateListChecked.value.indexOf(value.Cate) >= 0) {
+                  filterTableDataEnd.push(value)
+                }
+              }
+            }
           }
         }
       }

@@ -10,6 +10,7 @@ const data = store.state.name
 // 获取map_alpha--画图数据
 const map_alpha: { [key: string]: Record<string, unknown> } = {}
 const map_beta: { [key: string]: Record<string, unknown> } = {}
+
 Object.values(data).forEach(
   (item: { CDR3: string; Cate: string; Gene: string }) => {
     if (item.Gene === 'TRA') {
