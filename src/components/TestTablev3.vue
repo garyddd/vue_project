@@ -25,7 +25,7 @@
                     <p>Sequence
                       <el-tooltip effect='light'
                                   placement='right'>
-                        <template #content> If Gene channel be switched to <el-tag type='info'> only paired</el-tag>,<br> the α&β chains will be all matched.</template>
+                        <template #content> If Gene channel be switched to <el-tag type='info'> Only paired</el-tag>,<br> the α&β chains will be all matched.</template>
                         <el-icon>
                           <InfoFilled />
                         </el-icon>
@@ -44,7 +44,7 @@
                     <p>Variable segment
                       <el-tooltip effect='light'
                                   placement='right'>
-                        <template #content> If Gene channel be switched to <el-tag type='info'> only paired</el-tag>,<br> the V/J search bar will be disabled.</template>
+                        <template #content> If Gene channel be switched to <el-tag type='info'> Only paired</el-tag>,<br> the V/J search bar will be disabled.</template>
                         <el-icon>
                           <InfoFilled />
                         </el-icon>
@@ -337,7 +337,7 @@ const handleCheckedChangeCate = (value: string[]) => {
 const checkAllGene = ref(false)
 const isIndeterminateGene = ref(false)
 const geneListChecked = ref(['TRB'])
-const geneList = ['TRA', 'TRB', 'only paired']
+const geneList = ['TRA', 'TRB', 'Only paired']
 const handleCheckAllChangeGene = (val: boolean) => {
   geneListChecked.value = val ? geneList : ['TRB']
   isIndeterminateGene.value = !val
@@ -363,13 +363,13 @@ const handleCheckedChangeGene1 = (val: boolean) => {
     geneListChecked.value = ['TRB']
   }
   if (
-    geneListChecked.value[0] === 'only paired' &&
+    geneListChecked.value[0] === 'Only paired' &&
     geneListChecked.value.length > 1
   ) {
     geneListChecked.value.shift()
   }
-  if (geneListChecked.value.indexOf('only paired') >= 0) {
-    geneListChecked.value = ['only paired']
+  if (geneListChecked.value.indexOf('Only paired') >= 0) {
+    geneListChecked.value = ['Only paired']
     formDis.value = true
   } else {
     formDis.value = false
@@ -422,7 +422,7 @@ function doSearch() {
     return
   }
   const filterTableDataEnd: Array<string> = []
-  if (geneListChecked.value.indexOf('only paired') >= 0) {
+  if (geneListChecked.value.indexOf('Only paired') >= 0) {
     show_single.value = false
     Object.values(allData_paired).forEach((value) => {
       // console.log(!tableDataName.value)

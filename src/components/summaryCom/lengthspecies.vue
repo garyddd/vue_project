@@ -81,7 +81,6 @@ for (var k = 0; k < Object.keys(map_alpha).length; k++) {
 //       sumForNor_alpha[Object.keys(map_alpha)[k1]])? 0:map_alpha[Object.keys(map_alpha)[k1]][j1] /
 //       sumForNor_alpha[Object.keys(map_alpha)[k1]]
 
-
 //   }
 // }
 for (let x of xdata) {
@@ -89,7 +88,6 @@ for (let x of xdata) {
     if (Object.keys(Object.values(map_alpha)[l]).indexOf(String(x)) < 0) {
       Object.values(map_alpha)[l][x] = 0
     }
-    
   }
 }
 
@@ -131,7 +129,7 @@ const seriesa: {
 for (var i = 0; i < Object.keys(map_alpha).length; i++) {
   seriesa.push({
     name: Object.keys(map_alpha)[i],
-    type: 'line',
+    type: 'bar',
     smooth: true,
     xAxisIndex: 0,
     yAxisIndex: 0,
@@ -146,7 +144,7 @@ for (var i = 0; i < Object.keys(map_alpha).length; i++) {
 for (var ib = 0; ib < Object.keys(map_beta).length; ib++) {
   seriesa.push({
     name: Object.keys(map_beta)[ib],
-    type: 'line',
+    type: 'bar',
     smooth: true,
     xAxisIndex: 1,
     yAxisIndex: 1,
@@ -157,6 +155,7 @@ for (var ib = 0; ib < Object.keys(map_beta).length; ib++) {
   }),
     legend.add(Object.keys(map_beta)[ib])
 }
+
 // console.log(legend)
 function sequence(a: number, b: number) {
   if (a > b) {
@@ -238,13 +237,15 @@ const option = {
 
   series: seriesa,
 }
+
 const myChart = ref<HTMLElement>() //也可以用const myChart = ref<any>();
 
 const myCharts = ref<any>()
 onMounted(() => {
-  // 绘制图表
   myCharts.value = echarts.init(myChart.value!)
   myCharts.value.setOption(option)
   myCharts.value.setOption(option)
+
+  // 绘制图表
 })
 </script>

@@ -98,7 +98,7 @@ const seriesa: {
 for (var i = 0; i < Object.keys(map_alpha).length; i++) {
   seriesa.push({
     name: Object.keys(map_alpha)[i],
-    type: 'line',
+    type: 'bar',
     smooth: true,
     xAxisIndex: 0,
     yAxisIndex: 0,
@@ -113,7 +113,7 @@ for (var i = 0; i < Object.keys(map_alpha).length; i++) {
 for (var ib = 0; ib < Object.keys(map_beta).length; ib++) {
   seriesa.push({
     name: Object.keys(map_beta)[ib],
-    type: 'line',
+    type: 'bar',
     smooth: true,
     xAxisIndex: 1,
     yAxisIndex: 1,

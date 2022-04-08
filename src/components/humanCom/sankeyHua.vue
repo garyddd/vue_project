@@ -10,7 +10,7 @@ const data = store.state.name2
 
 const option = {
   title: {
-    text: 'Human TCR α chain (top50%)',
+    text: 'Human TCR α chain',
     left: '4%',
     textStyle: {
       fontStyle: 'oblique',
@@ -46,7 +46,7 @@ const option = {
       nodeGap: 10,
       top: '10%',
       emphasis: {
-        focus: 'adjacency',
+        focus: 'series',
       },
       data: Object.values(data)['0']['MAITGene'],
       links: Object.values(data)['0']['MAIT'],

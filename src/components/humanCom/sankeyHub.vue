@@ -7,32 +7,19 @@ import store from '@/store/store'
 import * as echarts from 'echarts'
 import { onMounted, ref } from 'vue'
 const data = store.state.name3
-// const map_sankey ={source:[],target:[],value:[]}
-const geneList = new Set()
-const links: { source: string; target: string; value: number }[] = []
-const dataG: { name: string }[] = []
-Object.values(data).forEach((item) => {
-  links.push({
-    source: item.source,
-    target: item.target,
-    value: item.value,
-  })
-  geneList.add(item.source)
-  geneList.add(item.target)
-})
-geneList.forEach((item) => {
-  dataG.push({
-    name: item,
-  })
-})
 const option = {
   title: {
-    text: 'Gene Usage',
-    x: 'center',
-    y: 'top',
-    subtext: 'Human TCR β chain (top50%)',
+    text: 'Human TCR β chain (top50%)',
+    left: '4%',
+    textStyle: {
+      fontStyle: 'oblique',
+    },
+    subtext: 'MAIT    |    NKT    |    GEMT',
+    subtextStyle: {
+      // fontStyle: 'italic',
+      fontWeight: 'bold',
+    },
   },
-
   tooltip: {
     trigger: 'item',
     triggerOn: 'mousemove',
@@ -55,11 +42,14 @@ const option = {
       layout: 'none',
       width: '20%',
       left: '4%',
+      nodeGap: 10,
+      top: '13%',
+      // layoutIterations: 0,
       emphasis: {
         focus: 'adjacency',
       },
-      data: dataG,
-      links: links,
+      data: Object.values(data)['0']['MAITGene'],
+      links: Object.values(data)['0']['MAIT'],
       nodeAlign: 'right',
       lineStyle: {
         color: 'source',
@@ -71,11 +61,13 @@ const option = {
       layout: 'none',
       width: '20%',
       left: '37%',
+      nodeGap: 10,
+      top: '13%',
       emphasis: {
         focus: 'adjacency',
       },
-      data: dataG,
-      links: links,
+      data: Object.values(data)['0']['NKTGene'],
+      links: Object.values(data)['0']['NKT'],
       nodeAlign: 'right',
       lineStyle: {
         color: 'source',
@@ -87,11 +79,13 @@ const option = {
       layout: 'none',
       width: '20%',
       left: '70%',
+      nodeGap: 10,
+      top: '13%',
       emphasis: {
         focus: 'adjacency',
       },
-      data: dataG,
-      links: links,
+      data: Object.values(data)['0']['GEMTGene'],
+      links: Object.values(data)['0']['GEMT'],
       nodeAlign: 'right',
       lineStyle: {
         color: 'source',

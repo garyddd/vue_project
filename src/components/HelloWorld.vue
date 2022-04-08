@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span='16'>
         <div style="width:100%;height:300px;background-color:white">
-<h2 style=";margin:2%;">Welcome to UcTc-db!</h2>
+<h2 style=";margin:2%;">Welcome to UcTCR-db!</h2>
         </div>
       </el-col>
       <el-col :span='8'>

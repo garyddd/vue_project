@@ -5,21 +5,17 @@
         style="padding-top:20px">Summary of the Datasets</h2>
     <div class="a_box">
       <a href="#all">
-        <el-button 
-                   type='primary'
+        <el-button type='primary'
                    style='width:8%'>All</el-button>
       </a><a href="#human">
-        <el-button 
-                   type='primary'
+        <el-button type='primary'
                    style='width:8%'>Human</el-button>
       </a><a href="#mouse">
-        <el-button 
-                   type='primary'
+        <el-button type='primary'
                    style='width:8%'>Mouse</el-button>
       </a><a href="#cattle">
         <el-button type='primary'
-                   style='width:8%'
-                   >Cattle</el-button>
+                   style='width:8%'>Cattle</el-button>
       </a>
     </div>
     <div style='width:30%;margin-left:1%'>
@@ -61,26 +57,22 @@
       <el-divider style="color: #409EFF;font-weight: bold;" />
       <countHuman></countHuman>
       <el-divider style='margin-top:0px' />
-      <!-- <el-row :gutter=10>
-
-        <el-col :span=8>
-
-          <sankeyHua></sankeyHua>
-          
-        </el-col>
-        
-      <el-divider direction='vertical' style='height:500px'/>
-        <el-col :span=8>
-
-          <sankeyHub></sankeyHub>
-        </el-col>
-        <el-col :span=8></el-col>
-      </el-row> -->
-  <h2 
-          style="padding-top:20px">Human TCR Gene Usage</h2>
+<!-- 
+      <h2 style="padding-top:20px">Human TCR Gene Usage</h2> -->
       <sankeyHua></sankeyHua>
       <el-divider />
       <sankeyHub></sankeyHub>
+      <el-divider />
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <graphHua></graphHua>
+        </el-col>
+        <el-col :span="12">
+          <graphHub></graphHub>
+        </el-col>
+      </el-row>
+
+      <el-divider />
     </div>
   </div>
 </template>
@@ -93,6 +85,8 @@ import lengthbeta from './summaryCom/lengthcate.vue'
 import countHuman from './humanCom/records.vue'
 import sankeyHua from './humanCom/sankeyHua.vue'
 import sankeyHub from './humanCom/sankeyHub.vue'
+import graphHua from './humanCom/graphHua.vue'
+import graphHub from './humanCom/graphHub.vue'
 import { getCurrentInstance, ref } from 'vue'
 
 const updataD = ref(

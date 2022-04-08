@@ -11,7 +11,8 @@ const data = store.state.name
 const map_gene: { [key: string]: number } = {}
 const map_species: { [key: string]: number } = {}
 const map_cate: { [key: string]: number } = {}
-Object.values(data).forEach((item: { Species: string; Gene: string; Cate: string }) => {
+Object.values(data).forEach(
+  (item: { Species: string; Gene: string; Cate: string }) => {
     if (!Object.prototype.hasOwnProperty.call(map_species, item.Species)) {
       map_species[item.Species] = 1
     } else {
@@ -27,6 +28,7 @@ Object.values(data).forEach((item: { Species: string; Gene: string; Cate: string
     } else {
       map_cate[item.Cate] += 1
     }
+
   }
 )
 const plotData = { species: [], gene: [], cate: [] }
@@ -65,8 +67,8 @@ const option = {
     top: '0%',
     feature: {
       mark: { show: true },
-      dataView: { show: true, title:'dataView',readOnly: false },
-      saveAsImage: { show: true, title:'save'  },
+      dataView: { show: true, title: 'dataView', readOnly: false },
+      saveAsImage: { show: true, title: 'save' },
     },
   },
   series: [
