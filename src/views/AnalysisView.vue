@@ -1,14 +1,21 @@
 <template>
-  <h2>This is analysis view</h2>
-  <!-- <TestTable></TestTable> -->
+  <el-row>
+    <el-col :span='4'></el-col>
+    <el-col :span='16'>
+      <anaCluster></anaCluster>
+    </el-col>
+    <el-col :span='4'></el-col>
+  </el-row>
+
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-// import TestTable from '../components/TestTable.vue'
+
+import anaCluster from '../components/anaCluster.vue'
 export default defineComponent({
   name: 'AnalysisView',
   components: {
-    // TestTable
-  }
+    anaCluster,
+  },
 })
 </script>

@@ -10,10 +10,10 @@ import { onMounted, ref, defineProps } from 'vue'
 const props = defineProps({
   cate: String,
 })
-const colors = ['#5470c6', '#91cc75', '#fac858']
+const colors = ['#ee6666', '#73c0de', '#3ba272']
 const myChart = ref<HTMLElement>()
 const myCharts = ref<any>()
-const label = 'Species'
+const label = 'Gene'
 let formatNumber = (num) => num.toString().replace(/(?=(\B)(\d{3})+$)/g, ',')
 axios
   .post('http://127.0.0.1:5000/getData', {
@@ -24,7 +24,7 @@ axios
   .then((res) => {
     const option = {
       title: {
-        text: 'Species',
+        text: 'Chain',
         left: 'center',
         top: '45%',
         textStyle: {
@@ -36,16 +36,16 @@ axios
       tooltip: {
         trigger: 'item',
       },
-
       color: colors,
       series: [
         {
           name: 'Records',
           type: 'pie',
+          selectedMode: 'single',
           radius: [50, 100],
-          center: ['50%', '50%'],
           data: res.data,
-          startAngle: '120',
+          center: ['50%', '50%'],
+          startAngle: '-60',
           label: {
             formatter: '{name|{b}}\n{value|{d}%}',
             rich: { value: { fontSize: 10, color: '#000000' } },

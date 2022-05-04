@@ -135,35 +135,35 @@ function sequence(a: number, b: number) {
   }
 }
 const xd = Array.from(xdata).sort(sequence)
+console.log(xd)
 const xdb = Array.from(xdata_beta).sort(sequence)
 
 const sizeValue = '55%'
 const option = {
   // title: { text: 'Length of CDR3', x: 'center', y: 'top' },
-  toolbox: {
-    show: true,
-    orient: 'vertical',
-    right: '0%',
-    top: '15%',
-    feature: {
-      mark: { show: true },
-      dataView: { show: true, title: 'dataView', readOnly: true },
-      magicType: {
-        show: true,
-        title: { line: 'switch to line', bar: 'switch to bar' },
-        type: ['line', 'bar'],
-      },
-      restore: { show: true, title: 'refresh' },
-      saveAsImage: { show: true, title: 'save' },
-    },
-  },
+  // toolbox: {
+  //   show: true,
+  //   orient: 'vertical',
+  //   right: '0%',
+  //   top: '15%',
+  //   feature: {
+  //     mark: { show: true },
+  //     dataView: { show: true, title: 'dataView', readOnly: true },
+  //     magicType: {
+  //       show: true,
+  //       title: { line: 'switch to line', bar: 'switch to bar' },
+  //       type: ['line', 'bar'],
+  //     },
+  //     restore: { show: true, title: 'refresh' },
+  //     saveAsImage: { show: true, title: 'save' },
+  //   },
+  // },
   tooltip: {
     axisPointer: {
       type: 'shadow',
     },
   },
   grid: [{ right: sizeValue }, { left: sizeValue }],
-
   legend: {
     orient: 'horizontal',
     data: Array.from(legend),
@@ -182,6 +182,16 @@ const option = {
         fontSize: 16,
         padding: 10,
       },
+      axisLine: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
+      axisTick: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
     },
     {
       type: 'category',
@@ -194,6 +204,16 @@ const option = {
         fontSize: 16,
         padding: 10,
       },
+      axisLine: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
+      axisTick: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
     },
   ],
   yAxis: [
@@ -205,6 +225,16 @@ const option = {
           fontSize: '10',
         },
       },
+      axisLine: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
+      axisTick: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
     },
     {
       type: 'value',
@@ -212,6 +242,16 @@ const option = {
       axisLabel: {
         textStyle: {
           fontSize: '10',
+        },
+      },
+      axisLine: {
+        lineStyle: {
+          color: '#000000',
+        },
+      },
+      axisTick: {
+        lineStyle: {
+          color: '#000000',
         },
       },
     },

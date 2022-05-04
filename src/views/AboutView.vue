@@ -1,17 +1,20 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <!-- <TestBtn></TestBtn> -->
-    <HelloWorld2></HelloWorld2>
-  </div>
+  <el-row>
+    <el-col :span="4"></el-col>
+    <el-col :span="16">
+      <aboutCom></aboutCom>
+    </el-col>
+    <el-col :span="4"></el-col>
+  </el-row>
 </template>
 <script>
-import HelloWorld2 from '../components/HelloWorld2.vue'
+import aboutCom from '../components/aboutCom.vue'
+
 export default {
   name: 'AboutView',
   components: {
     // TestBtn,
-    HelloWorld2
-  }
+    aboutCom,
+  },
 }
 </script>
